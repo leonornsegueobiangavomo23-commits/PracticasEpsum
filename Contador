@@ -1,0 +1,105 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class Contador : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    [SerializeField] private TMP_Text temporizador;
+    [SerializeField] private float tiempoInicial = 180f;
+    private float tiempoRestante;
+    public Button startButton;
+    public bool mantenerTiempo = false;
+    private const string TIME_KEY = "TimeValue";
+    private static bool yaInicioJuego = false;
+    [SerializeField] private string nombreEscenaFinal = "Escena Final";
+    void Start()
+    {
+        if (!yaInicioJuego)
+        {
+            PlayerPrefs.DeleteKey(TIME_KEY);
+            tiempoRestante = tiempoInicial;
+            mantenerTiempo = false;
+            yaInicioJuego = true;
+        }
+        else
+        {
+            mantenerTiempo = true;
+            if (PlayerPrefs.HasKey(TIME_KEY))
+            {
+                tiempoRestante = PlayerPrefs.GetFloat(TIME_KEY);
+            }
+            else
+            {
+                tiempoRestante = tiempoInicial;
+            }
+        }
+        if (startButton != null)
+        {
+            startButton.onClick.AddListener(AlternarCronometro);
+        }
+        ActualizarTextoVisual();
+    }
+    void Update()
+    {
+        if (mantenerTiempo && tiempoRestante > 0)
+        {
+            tiempoRestante -= Time.deltaTime;
+            ActualizarTextoVisual();
+            ControlarColorTexto(); /* Función para revisar el color en cada fotograma, no olvidar*/
+        }
+        else if (tiempoRestante <= 0 && mantenerTiempo)
+        {
+            FinalizarTiempo();
+        }
+    }
+    void ActualizarTextoVisual()
+    {
+        int minutos = Mathf.FloorToInt(tiempoRestante / 60);
+        int segundos = Mathf.FloorToInt(tiempoRestante % 60);
+        temporizador.text = string.Format("{0:00}:{1:00}", minutos, segundos);
+    }
+    /*Controlar los cambios de color basados en el tiempo restante*/
+    void ControlarColorTexto()
+    {
+        float mitadDelTiempo = tiempoInicial / 2f; /*Mitad del tiempo*/
+        if (tiempoRestante <= 30f)
+        {
+            /*Cuando queda menos de un minuto poner a rojo*/
+            temporizador.color = Color.red;
+        }
+        else if (tiempoRestante <= mitadDelTiempo)
+        {
+            /*Cuando esta a la mitad del tiempo poner a amarillo*/
+            temporizador.color = Color.yellow;
+        }
+        else
+        {
+            /*Color por defecto*/
+            temporizador.color = Color.white;
+        }
+    }
+    void FinalizarTiempo()
+    {
+        tiempoRestante = 0;
+        mantenerTiempo = false;
+        ActualizarTextoVisual();
+        PlayerPrefs.DeleteKey(TIME_KEY);
+        yaInicioJuego = false;
+        SceneManager.LoadScene(nombreEscenaFinal);
+    }
+    public void AlternarCronometro()
+    {
+        mantenerTiempo = !mantenerTiempo;
+    }
+    void OnDisable()
+    {
+        if (tiempoRestante > 0 && yaInicioJuego)
+        {
+            PlayerPrefs.SetFloat(TIME_KEY, tiempoRestante);
+            PlayerPrefs.Save();
+        }
+    }
+}
