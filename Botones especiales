@@ -1,0 +1,42 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class BotonesEspeciales : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    [System.Serializable]
+    public struct ConfiguracionRuta
+    {
+        public string nombreIdentificador;
+        /*Escena normal*/
+        public string escenaNormal;
+        /*Escena extra*/
+        public string escenaModificada;
+    }
+    [Header("Lista de Rutas del Juego")]
+    [Tooltip("Añade aquí todas las configuraciones de botones que necesites.")]
+    public ConfiguracionRuta[] rutas;
+    public void ViajarRutaEspecifica(int indiceRuta)
+    {
+        if (indiceRuta < 0 || indiceRuta >= rutas.Length)
+        {
+            Debug.LogError($"Error: La escena {indiceRuta} no existe.");
+            return;
+        }
+        ConfiguracionRuta rutaSeleccionada = rutas[indiceRuta];
+        if (CandadoProgreso.CandadoAbierto)
+        {
+            Debug.Log($"[Botón {rutaSeleccionada.nombreIdentificador}] Cargando escena MODIFICADA: {rutaSeleccionada.escenaModificada}");
+            SceneManager.LoadScene(rutaSeleccionada.escenaModificada);
+        }
+        else
+        {
+            Debug.Log($"[Botón {rutaSeleccionada.nombreIdentificador}] Cargando escena NORMAL: {rutaSeleccionada.escenaNormal}");
+            SceneManager.LoadScene(rutaSeleccionada.escenaNormal);
+        }
+    }
+}
