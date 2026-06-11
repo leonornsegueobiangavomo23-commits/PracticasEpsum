@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class LlaveProgreso : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    public static bool LlaveCogida { get; set; } = false;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ActivarLlave();
+        }
+    }
+    private void OnMouseDown()
+    {
+        ActivarLlave();
+    }
+    public static void ActivarLlave()
+    {
+        LlaveCogida = true;
+    }
+}
