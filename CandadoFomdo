@@ -1,0 +1,46 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class CandadoProgreso : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    public static bool CandadoAbierto { get; private set; } = false;
+    private void Awake()
+    {
+        /*Al empezar el juego o reiniciar la escena, aseguramos el estado inicial si es necesario, lo de abajo por si acaso.*/
+        // CandadoAbierto = false;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ActivarCandado();
+        }
+    }
+    private void OnMouseDown()
+    {
+        ActivarCandado();
+    }
+    private void ActivarCandado()
+    {
+        if (!CandadoAbierto)
+        {
+            CandadoAbierto = true;
+            Debug.Log("¡Candado activado! El destino del viaje ha cambiado.");
+            /* CONEXIÓN CON EL GAMEOBJECT "TextoAlerta" */
+            GameObject textObject = GameObject.Find("TextoAlerta");
+            if (textObject != null)
+            {
+                TextMeshProUGUI uiTextAlert = textObject.GetComponent<TextMeshProUGUI>();
+                if (uiTextAlert != null)
+                {
+                    uiTextAlert.text = "Debería buscar una llave...";
+                }
+            }
+        }
+    }
+}
