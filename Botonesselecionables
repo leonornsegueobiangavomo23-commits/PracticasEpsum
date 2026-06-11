@@ -1,0 +1,78 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class ObjetosSeleccionables : MonoBehaviour
+{
+    /*El nombre o ID de este objeto específico TAL CUALLLLLL (cuchillo, bolsa, mechero, llave)*/
+    [SerializeField] private string myID;
+    /*Aquí el mensaje que aparecerá cuando el jugador ACERTE con este objeto*/
+    [TextArea(2, 3)]
+    [SerializeField] private string successMessage;
+    /*Aquí la pista que aparecerá si el jugador se equivoca al clicar ESTE objeto.*/
+    [TextArea(2, 3)]
+    [SerializeField] private string hintMessage;
+    /*Esto es para el inspector*/
+    private static string[] correctOrder = { "cuchillo", "bolsa", "mechero", "llave" };
+    private static int currentIndex = 0;
+    /*Lista global para recordar qué IDs ya se han recogido con éxito*/
+    private static List<string> objetosRecogidos = new List<string>();
+    /* NUEVO: Interruptor global para saber si el jugador ya completó toda la secuencia con éxito */
+    private static bool misionCompletada = false;
+    /*Al cargar la escena, si la misión terminó o este objeto ya se recogió, se desactiva solo*/
+    private void Start()
+    {
+        if (misionCompletada || objetosRecogidos.Contains(myID))
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    private void OnMouseDown()
+    {
+        /*Buscar el texto de la interfaz en la escena actual*/
+        GameObject textObject = GameObject.Find("TextoAlerta");
+        TextMeshProUGUI uiTextAlert = null;
+        if (textObject != null) uiTextAlert = textObject.GetComponent<TextMeshProUGUI>();
+        /*Comprobar ID de este objeto coincide*/
+        if (myID == correctOrder[currentIndex])
+        {
+            /*¡ACIERTO ALELUYA YAAAAAAAAAA!*/
+            currentIndex++;
+            /*Guardamos el ID en la lista global para que no reaparezca al cambiar de escena*/
+            if (!objetosRecogidos.Contains(myID))
+            {
+                objetosRecogidos.Add(myID);
+            }
+            if (uiTextAlert != null) uiTextAlert.text = successMessage;
+            gameObject.SetActive(false);
+            /*recogen los 4 objetos (Al recoger la LLAVE)*/
+            if (currentIndex >= correctOrder.Length)
+            {
+                if (uiTextAlert != null) uiTextAlert.text = "Ya tengo la llave, debería volver.";
+                LlaveProgreso.ActivarLlave();
+                misionCompletada = true;
+                ResetSystem(false); /*FALSO PARA QUE No borres los objetos porque ya ha ganado*/
+            }
+        }
+        else
+        {
+            // ¡FALLO!
+            if (uiTextAlert != null)
+            {
+                uiTextAlert.text = $"{hintMessage}";
+            }
+            ResetSystem(true); /*VERDADERO PARA Borra el progreso porque ha fallado y debe reiniciar*/
+        }
+    }
+    private static void ResetSystem(bool porFallo)
+    {
+        currentIndex = 0;
+        if (porFallo)
+        {
+            objetosRecogidos.Clear();
+        }
+    }
+}
