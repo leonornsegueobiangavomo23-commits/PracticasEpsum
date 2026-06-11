@@ -1,0 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+public class CambioEscena : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    public void CargarEscena(string escena)
+    {
+        SceneManager.LoadScene(escena);
+    }
+}
