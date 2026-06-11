@@ -1,0 +1,20 @@
+using UnityEngine;
+public class MusicaFondo : MonoBehaviour
+{
+    private static MusicaFondo instancia;
+    void Awake()
+    {
+        // 1. Evita duplicados: Si ya existe la música, destruye la nueva inmediatamente
+        if (instancia != null && instancia != this)
+        {
+            Destroy(gameObject);
+            return; // Detiene la ejecución del código restante
+        }
+        // 2. Asigna la instancia principal
+        instancia = this;
+        // 3. Lo saca de cualquier objeto padre (obligatorio para DontDestroyOnLoad)
+        transform.SetParent(null);
+        // 4. Lo protege para que no se destruya al cambiar de escena
+        DontDestroyOnLoad(gameObject);
+    }
+}
