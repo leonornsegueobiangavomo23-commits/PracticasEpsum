@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class BotonSalir : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    public Button salirdeljuego;
+    public void SalirDelJuego()
+    {
+        Application.Quit();
+        Debug.Log("El juego se ha cerrado");
+    }
+}
