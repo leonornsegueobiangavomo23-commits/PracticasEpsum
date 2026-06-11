@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class OcultarObjetos : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    public Button startbutton;
+    private bool empiezajuego = true;
+    public GameObject desaparecerTemporizador;
+    public GameObject jugar;
+    public GameObject salir;
+    public GameObject derecha;
+    public GameObject izquierda;
+    public GameObject arriba;
+    public GameObject abajo;
+    void IniciarTemporizador()
+    {
+        empiezajuego = true;
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        desaparecerTemporizador.SetActive(false); /*Aquí haré que desaparezca el temporizador*/
+        jugar.SetActive(true); /*Esto es para el boton jugar*/
+        salir.SetActive(true); /*Esto es para el boton salir*/
+        /*Botones*/
+        derecha.SetActive(false);
+        izquierda.SetActive(false);
+        arriba.SetActive(false);
+        abajo.SetActive(false);
+        if (startbutton != null)
+        {
+            startbutton.onClick.AddListener(IniciarTemporizador);
+        }
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (empiezajuego)
+        {
+            desaparecerTemporizador.SetActive(true); /*Aquí haré que aparezca el temporizador*/
+            jugar.SetActive(false); /*Aquí haré que desaparezcan el boton jugar*/
+            salir.SetActive(false); /*Aquí haré que desaparezcan el boton salir*/
+            /*Botones*/
+            derecha.SetActive(true); /*Aquí la flecha derecha*/
+            izquierda.SetActive(true);
+            arriba.SetActive(true);
+            abajo.SetActive(true);
+        }
+    }
+}
