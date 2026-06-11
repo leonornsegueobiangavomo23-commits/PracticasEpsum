@@ -1,0 +1,20 @@
+using UnityEngine;
+using UnityEngine.Video;
+public class InicioVideo : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    private VideoPlayer miVideoPlayer;
+    void Start()
+    {
+        miVideoPlayer = GetComponent<VideoPlayer>();
+        /*Detecta el final del video*/
+        miVideoPlayer.loopPointReached += AlTerminarVideo;
+    }
+    void AlTerminarVideo(VideoPlayer vp)
+    {
+        /*Para parar el video*/
+        miVideoPlayer.Stop();
+        /*Esto está para que no se congele el video*/
+        miVideoPlayer.targetTexture = null;
+    }
+}
