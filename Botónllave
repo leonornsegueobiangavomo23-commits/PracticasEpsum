@@ -1,0 +1,40 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class BotonLlave : MonoBehaviour
+{
+    /*ESTO YA HACE LO QUE DEBERÍA, NO TOCAR MÁS EN SU VIDA*/
+    [System.Serializable]
+    public struct ConfiguracionRutaLlave
+    {
+        public string nombreIdentificador;
+        /*Escena normal (si NO tienes la llave)*/
+        public string escenaNormal;
+        /*Escena extra (si SÍ tienes la llave)*/
+        public string escenaModificada;
+    }
+    public ConfiguracionRutaLlave[] rutas;
+    public void ViajarRutaLlave(int indiceRuta)
+    {
+        if (indiceRuta < 0 || indiceRuta >= rutas.Length)
+        {
+            Debug.LogError($"Error: La escena {indiceRuta} no existe.");
+            return;
+        }
+        ConfiguracionRutaLlave rutaSeleccionada = rutas[indiceRuta];
+        if (LlaveProgreso.LlaveCogida)
+        {
+            Debug.Log($"[Botón Llave {rutaSeleccionada.nombreIdentificador}] Cargando escena MODIFICADA: {rutaSeleccionada.escenaModificada}");
+            SceneManager.LoadScene(rutaSeleccionada.escenaModificada);
+        }
+        else
+        {
+            Debug.Log($"[Botón Llave {rutaSeleccionada.nombreIdentificador}] Cargando escena NORMAL: {rutaSeleccionada.escenaNormal}");
+            SceneManager.LoadScene(rutaSeleccionada.escenaNormal);
+        }
+    }
+}
