@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class ImagenFinal : MonoBehaviour
+{
+    [System.Serializable]
+    public class ElementoOculto
+    {
+        public GameObject objetoActivar;
+        public float tiempoAparicion;
+    }
+    public List<ElementoOculto> elementosOcultos;
+    void Start()
+    {
+        /*Cuenta regresiva*/
+        foreach (var elemento in elementosOcultos)
+        {
+            if (elemento.objetoActivar != null)
+            {
+                StartCoroutine(EsperarYActivar(elemento));
+            }
+        }
+    }
+    IEnumerator EsperarYActivar(ElementoOculto elemento)
+    {
+        yield return new WaitForSeconds(elemento.tiempoAparicion);
+        /*Aquí se muestran los objetos*/
+        elemento.objetoActivar.SetActive(true);
+    }
+}
